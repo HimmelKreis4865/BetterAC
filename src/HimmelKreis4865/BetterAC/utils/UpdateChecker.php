@@ -22,8 +22,6 @@ class UpdateChecker extends AsyncTask
     {
         $file = Internet::getURL(self::BASE_URL);
         $file = yaml_parse($file);
-        var_dump($file);
-        var_dump($this->currentVersion);
         if (isset($file["version"]) and $file["version"] === $this->currentVersion) {
             $this->setResult(true);
         } else {
