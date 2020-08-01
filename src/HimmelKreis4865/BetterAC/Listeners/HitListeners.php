@@ -9,6 +9,9 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\cheat\PlayerIllegalMoveEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\Item;
+use pocketmine\item\Pickaxe;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 
@@ -18,6 +21,7 @@ class HitListeners implements Listener
     private $moves = [];
 
     public function onHit(EntityDamageByEntityEvent $event) {
+        if (BetterAC::getInstance()->reachedTPSLimit()) return;
         if (!$event->getDamager() instanceof Player) return;
         if (BetterAC::getInstance()->configManager->reachCheckEnabled) {
             if (!BetterAC::getInstance()->inRange($event->getDamager(), $event->getEntity()->asVector3(), BetterAC::getInstance()->configManager->maxRange[BetterAC::getInstance()->playerClientDataList[$event->getDamager()->getName()]])) {
@@ -35,16 +39,18 @@ class HitListeners implements Listener
 
         }
         if (!BetterAC::getInstance()->configManager->autoClickerCheckEnabled) return;
-        if (BetterAC::getInstance()->reachedTPSLimit()) return;
+
         if ($event->getDamager() instanceof Player) BetterAC::getInstance()->checkClickRate($event->getDamager());
     }
 
 
-
+    public $times = 0;
 
     public function onInteract(PlayerInteractEvent $event) {
         if (!BetterAC::getInstance()->configManager->autoClickerCheckEnabled) return;
         if (BetterAC::getInstance()->reachedTPSLimit()) return;
+        if ($event->getItem()->hasEnchantment(Enchantment::EFFICIENCY) and $event->getItem() instanceof Pickaxe) return;
         BetterAC::getInstance()->checkClickRate($event->getPlayer());
+        $this->times++;
     }
 }

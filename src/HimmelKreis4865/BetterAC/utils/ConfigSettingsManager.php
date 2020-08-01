@@ -20,7 +20,7 @@ class ConfigSettingsManager
     public $maxRange = [
         BetterAC::TYPE_PC => 6,
         BetterAC::TYPE_CONSOLE => 6,
-        BetterAC::TYPE_MOBILE => 8
+        BetterAC::TYPE_MOBILE => 6
     ];
 
     public $autoClickerCheckEnabled = false;

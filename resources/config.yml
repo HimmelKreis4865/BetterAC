@@ -1,0 +1,67 @@
+---
+# Configuration file of BetterAC AntiCheat by HimmelKreis4865
+#  __________        __    __                  _____  _________
+#  \______   \ _____/  |__/  |_  ___________  /  _  \ \_   ___ \
+#  |    |  _// __ \   __\   __\/ __ \_  __ \/  /_\  \/    \  \/
+#  |    |   \  ___/|  |  |  | \  ___/|  | \/    |    \     \____
+#  |______  /\___  >__|  |__|  \___  >__|  \____|__  /\______  /
+
+
+# Edit the language to your target value.
+# Please check out README.md for changing language
+language: eng
+
+# Select whether to use modules or not:
+anti_autoclicker: true
+anti_spam: true
+anti_fly: true
+anti_speed: false
+anti_noclip: true
+anti_reach: true
+
+# Do you want to check your operators too?
+check_ops: false
+
+# Select a provider to save warns
+# Supported providers: yaml, mysql
+# default provider: yaml
+provider: "yaml"
+
+# if you are using MySQL, please set connect data here
+# This plugin is using 'mysqli' extension, it must be installed and enabled to use MySQL
+mysql:
+ host: "127.0.0.1"
+ username: "user"
+ password: "password"
+ database: "db"
+
+
+# Select a minimum of TPS to use this anticheat
+# To prevent lags, this plugin will disable if TPS is under the given value. (default: 15)
+min_tps: 15
+
+
+# Set a max. amount of warns until punishment starts:
+max_warns: 4
+
+# And finally, set an action to punish player.
+# Therefore, you should just enter a valid command
+# use {playername} to replace it with the player's name
+punish_command: "ban {playername} hacking"
+
+# only change this values if 'anti_spam' is enabled above
+
+# cool down for writing and preventing spam (in seconds)
+spam_cooldown: 3
+
+# set max clicks for certain devices:
+autoclicker_pc: 35
+autoclicker_mobile: 15
+autoclicker_console: 25
+
+# set max range for devices
+# NOTE: Default values should be correct
+range_pc: 6
+range_mobile: 6
+range_console: 6
+...

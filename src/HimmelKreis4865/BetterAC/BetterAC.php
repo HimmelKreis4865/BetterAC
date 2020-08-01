@@ -17,6 +17,8 @@ use HimmelKreis4865\BetterAC\utils\Language;
 use HimmelKreis4865\BetterAC\utils\UpdateChecker;
 use HimmelKreis4865\BetterAC\Listeners\PacketListener;
 use pocketmine\command\ConsoleCommandSender;
+use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\Pickaxe;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -132,23 +134,29 @@ class BetterAC extends PluginBase
         }
     }
 
-    public function checkClickRate(Player $player)
+    public function checkClickRate(Player $player, bool $pickAxeCheck = false)
     {
+        $maxClicks = $this->configManager->maxClicksPerSecond[$this->playerClientDataList[$player->getName()]];
         $hits = 1;
         if (isset($this->playerHits[$player->getName()]) and $this->playerHits[$player->getName()][1] === time()) $hits = 1 + $this->playerHits[$player->getName()][0];
         $this->playerHits[$player->getName()] = [$hits, time()];
-        var_dump($hits);
-        if ($hits >= $this->configManager->maxClicksPerSecond[$this->playerClientDataList[$player->getName()]]) {
+        if ($hits >= $maxClicks) {
+            if ($pickAxeCheck) {
+                if (($item = $player->getInventory()->getItemInHand()) instanceof Pickaxe) {
+                    if ($item->hasEnchantment(Enchantment::EFFICIENCY) and $item->getEnchantmentLevel(Enchantment::EFFICIENCY) > 1) {
+                        $maxClicks = $maxClicks * 1.25 * $item->getEnchantmentLevel(Enchantment::EFFICIENCY);
+                        if ($hits < $maxClicks) return;
+                    }
+                }
+            }
             unset($this->playerHits[$player->getName()]);
             $this->warnPlayer($player);
             return;
         }
-        if ($this->playerHits[$player->getName()][1] !== time()) unset($this->playerHits[$player->getName()]);
     }
 
     public function inRange(Vector3 $search, Vector3 $target, int $maxRange) :bool
     {
-        var_dump((int)$search->distance($target) . "   ::::   " . $maxRange);
         if ((int)$search->distance($target) < $maxRange) return true;
         return false;
     }

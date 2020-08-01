@@ -1,0 +1,6 @@
+---
+warn: "You got detected and warned by AntiCheat! Disable it now!"
+spam_cooldown: "Please wait {seconds} seconds before writing again!"
+
+
+...

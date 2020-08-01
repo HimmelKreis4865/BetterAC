@@ -5,6 +5,8 @@ namespace HimmelKreis4865\BetterAC\Listeners;
 use HimmelKreis4865\BetterAC\BetterAC;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
+use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\enchantment\EnchantmentInstance;
 
 class ChatListener implements Listener
 {
