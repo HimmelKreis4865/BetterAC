@@ -43,14 +43,10 @@ class HitListeners implements Listener
         if ($event->getDamager() instanceof Player) BetterAC::getInstance()->checkClickRate($event->getDamager());
     }
 
-
-    public $times = 0;
-
     public function onInteract(PlayerInteractEvent $event) {
         if (!BetterAC::getInstance()->configManager->autoClickerCheckEnabled) return;
         if (BetterAC::getInstance()->reachedTPSLimit()) return;
         if ($event->getItem()->hasEnchantment(Enchantment::EFFICIENCY) and $event->getItem() instanceof Pickaxe) return;
         BetterAC::getInstance()->checkClickRate($event->getPlayer());
-        $this->times++;
     }
 }
