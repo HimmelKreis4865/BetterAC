@@ -53,7 +53,7 @@ max_warns: 4
 # And finally, set an action to punish player.
 # Therefore, you should just enter a valid command
 # use {playername} to replace it with the player's name
-punish_command: "ban {playername} hacking"
+punish_commands: ["ban {playername} hacking", "say {playername} got punished for hacking!"]
 
 # only change this values if 'anti_spam' is enabled above
 

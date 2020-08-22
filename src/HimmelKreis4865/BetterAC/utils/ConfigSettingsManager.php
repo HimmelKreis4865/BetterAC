@@ -10,7 +10,7 @@ class ConfigSettingsManager
 
     public $maxWarnsForBan = 4;
 
-    public $punishCommand = "ban {playername} hacking";
+    public $punishCommands = ["ban {playername} hacking", "say {playername} got punished for hacking!"];
 
     public $maxClicksPerSecond = [
         BetterAC::TYPE_PC => 35,
@@ -26,7 +26,6 @@ class ConfigSettingsManager
     public $autoClickerCheckEnabled = false;
     public $speedCheckEnabled = false;
     public $noClipEnabled = false;
-    public $flyCheckEnabled = false;
     public $spamCheckEnabled = false;
     public $reachCheckEnabled = false;
 
@@ -54,7 +53,6 @@ class ConfigSettingsManager
 
         if ($file->exists("anti_autoclicker") and (bool) $file->get("anti_autoclicker")) $this->autoClickerCheckEnabled = true;
         if ($file->exists("anti_spam") and (bool) $file->get("anti_spam")) $this->spamCheckEnabled = true;
-        //if ($file->exists("anti_fly") and (bool) $file->get("anti_fly")) $this->flyCheckEnabled = true;
         if ($file->exists("anti_noclip") and (bool) $file->get("anti_noclip")) $this->noClipEnabled = true;
         if ($file->exists("anti_speed") and (bool) $file->get("anti_speed")) $this->speedCheckEnabled = true;
         if ($file->exists("anti_reach") and (bool) $file->get("anti_reach")) $this->reachCheckEnabled = true;
@@ -74,7 +72,7 @@ class ConfigSettingsManager
 
         }
         if ($file->exists("check_ops") and (bool) $file->get("check_ops")) $this->ignoreOp = true;
-        if ($file->exists("punish_command")) $this->punishCommand = $file->get("punish_command");
+        if ($file->exists("punish_commands") and is_array($file->get("punish_commands"))) $this->punishCommands = $file->get("punish_commands");
         if ($file->exists("min_tps")) $this->minTPS = $file->get("min_tps");
         if ($file->exists("max_warns") and is_numeric($file->get("max_warns"))) $this->maxWarnsForBan = (int) $file->get("max_warns");
         if ($file->exists("autoclicker_pc") and $file->exists("autoclicker_console") and $file->exists("autoclicker_mobile")) {

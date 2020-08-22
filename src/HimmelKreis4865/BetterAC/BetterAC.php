@@ -178,7 +178,9 @@ class BetterAC extends PluginBase
         if ($event->isCancelled()) return;
         BetterAC::getProvider()->addWarn($player->getName());
         if ((int) BetterAC::getProvider()->getWarns($player->getName()) > $this->configManager->maxWarnsForBan) {
-            Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), str_replace(["{playername}", "{reason}"], [$player->getName(), PlayerWarnEvent::getCauseString($cause)], $this->configManager->punishCommand));
+            foreach ($this->configManager->punishCommands as $command) {
+                Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), str_replace(["{playername}", "{reason}"], [$player->getName(), PlayerWarnEvent::getCauseString($cause)], $command));
+            }
             $this->getLogger()->notice("Player " . $player->getName() . " was automatically punished by BetterAC for: [" . PlayerWarnEvent::getCauseString($cause) . "]");
             BetterAC::getProvider()->resetWarns($player->getName());
         }
