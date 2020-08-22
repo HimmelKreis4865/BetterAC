@@ -20,7 +20,7 @@ class ConfigSettingsManager
     public $maxRange = [
         BetterAC::TYPE_PC => 6,
         BetterAC::TYPE_CONSOLE => 6,
-        BetterAC::TYPE_MOBILE => 6
+        BetterAC::TYPE_MOBILE => 8
     ];
 
     public $autoClickerCheckEnabled = false;
@@ -32,6 +32,8 @@ class ConfigSettingsManager
 
     public $ignoreOp = false;
 
+    public $killAuraCheckEnabled = true;
+
     public $provider = "yaml";
 
     public $mysqlSettings = [
@@ -41,7 +43,10 @@ class ConfigSettingsManager
         "database" => "db"
     ];
 
+
     public $spam_cooldown;
+
+    public $interactAutoClickerEnabled = false;
 
     public function __construct()
     {
@@ -49,10 +54,12 @@ class ConfigSettingsManager
 
         if ($file->exists("anti_autoclicker") and (bool) $file->get("anti_autoclicker")) $this->autoClickerCheckEnabled = true;
         if ($file->exists("anti_spam") and (bool) $file->get("anti_spam")) $this->spamCheckEnabled = true;
-        if ($file->exists("anti_fly") and (bool) $file->get("anti_fly")) $this->flyCheckEnabled = true;
+        //if ($file->exists("anti_fly") and (bool) $file->get("anti_fly")) $this->flyCheckEnabled = true;
         if ($file->exists("anti_noclip") and (bool) $file->get("anti_noclip")) $this->noClipEnabled = true;
         if ($file->exists("anti_speed") and (bool) $file->get("anti_speed")) $this->speedCheckEnabled = true;
         if ($file->exists("anti_reach") and (bool) $file->get("anti_reach")) $this->reachCheckEnabled = true;
+        if ($file->exists("anti_killaura") and (bool) $file->get("anti_killaura")) $this->killAuraCheckEnabled = true;
+        if ($file->exists("interactAutoClickerEnabled") and (bool) $file->get("interactAutoClickerEnabled")) $this->interactAutoClickerEnabled = true;
 
         if ($file->exists("provider") and $file->get("provider") === "mysql") {
             if ($file->getNested("mysql.host") !== null and $file->getNested("mysql.username") !== null and $file->getNested("mysql.password") !== null and $file->getNested("mysql.database") !== null) {

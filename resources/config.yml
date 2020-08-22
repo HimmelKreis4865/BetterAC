@@ -14,12 +14,18 @@ language: eng
 # Select whether to use modules or not:
 anti_autoclicker: true
 anti_spam: true
-anti_fly: true
-anti_speed: false
+anti_speed: false #not working yet
 anti_noclip: true
 anti_reach: true
+anti_killaura: false #not secure, may includes some issues
+
+# The setting below is in development version and could throw some errors on e.g CityBuild servers or generally servers you can break blocks fast
+# Should work on servers only having pvp or not so much breaking blocks
+# This setting will only work if you set `anti_autoclicker` above to true
+interactAutoClickerEnabled: true
 
 # Do you want to check your operators too?
+# Not working for all modules yet
 check_ops: false
 
 # Select a provider to save warns
@@ -62,6 +68,6 @@ autoclicker_console: 25
 # set max range for devices
 # NOTE: Default values should be correct
 range_pc: 6
-range_mobile: 6
+range_mobile: 8
 range_console: 6
 ...

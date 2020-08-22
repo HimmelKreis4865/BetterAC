@@ -3,6 +3,7 @@
 namespace HimmelKreis4865\BetterAC;
 
 use HimmelKreis4865\BetterAC\Events\PlayerWarnEvent;
+use HimmelKreis4865\BetterAC\Listeners\BlockListener;
 use HimmelKreis4865\BetterAC\Listeners\ChatListener;
 use HimmelKreis4865\BetterAC\Listeners\HitListeners;
 use HimmelKreis4865\BetterAC\Listeners\JoinListener;
@@ -72,6 +73,7 @@ class BetterAC extends PluginBase
         $this->getServer()->getPluginManager()->registerEvents(new PacketListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new MoveListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new JoinListener(), $this);
+        if ($this->configManager->killAuraCheckEnabled) $this->getServer()->getPluginManager()->registerEvents(new BlockListener(), $this);
         // task is submitted every 6 hours
         // If you changed mysqli timeout under this 6 hours, please change the code or just edit mysqli settings
         $this->getScheduler()->scheduleRepeatingTask(new MySQLRefreshTask(), (20 * 60 * 60 * 6));
@@ -134,25 +136,28 @@ class BetterAC extends PluginBase
         }
     }
 
-    public function checkClickRate(Player $player, bool $pickAxeCheck = false)
+    /**
+     * Checks if player clickRate is legit or not
+     *
+     * @api
+     *
+     * @param Player $player
+     *
+     * @param bool $pickAxeCheck temporary unused
+     *
+     * @return true if legit
+     * @return false if not legit and player get warned
+     */
+    public function checkClickRate(Player $player, bool $pickAxeCheck = false) :bool
     {
         $maxClicks = $this->configManager->maxClicksPerSecond[$this->playerClientDataList[$player->getName()]];
         $hits = 1;
         if (isset($this->playerHits[$player->getName()]) and $this->playerHits[$player->getName()][1] === time()) $hits = 1 + $this->playerHits[$player->getName()][0];
         $this->playerHits[$player->getName()] = [$hits, time()];
-        if ($hits >= $maxClicks) {
-            if ($pickAxeCheck) {
-                if (($item = $player->getInventory()->getItemInHand()) instanceof Pickaxe) {
-                    if ($item->hasEnchantment(Enchantment::EFFICIENCY) and $item->getEnchantmentLevel(Enchantment::EFFICIENCY) > 1) {
-                        $maxClicks = $maxClicks * 1.25 * $item->getEnchantmentLevel(Enchantment::EFFICIENCY);
-                        if ($hits < $maxClicks) return;
-                    }
-                }
-            }
-            unset($this->playerHits[$player->getName()]);
-            $this->warnPlayer($player);
-            return;
-        }
+        if ($hits <= $maxClicks) return true;
+        unset($this->playerHits[$player->getName()]);
+        $this->warnPlayer($player, PlayerWarnEvent::CAUSE_AUTOCLICKER);
+        return false;
     }
 
     public function inRange(Vector3 $search, Vector3 $target, int $maxRange) :bool
@@ -166,11 +171,15 @@ class BetterAC extends PluginBase
         return ($this->getServer()->getTicksPerSecond() <= $this->configManager->minTPS);
     }
 
-    public function warnPlayer(Player $player)
+    public function warnPlayer(Player $player, int $cause = PlayerWarnEvent::CAUSE_CUSTOM)
     {
+        $event = new PlayerWarnEvent($player, $cause);
+        $event->call();
+        if ($event->isCancelled()) return;
         BetterAC::getProvider()->addWarn($player->getName());
         if ((int) BetterAC::getProvider()->getWarns($player->getName()) > $this->configManager->maxWarnsForBan) {
-            Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), str_replace("{playername}", $player->getName(), $this->configManager->punishCommand));
+            Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), str_replace(["{playername}", "{reason}"], [$player->getName(), PlayerWarnEvent::getCauseString($cause)], $this->configManager->punishCommand));
+            $this->getLogger()->notice("Player " . $player->getName() . " was automatically punished by BetterAC for: [" . PlayerWarnEvent::getCauseString($cause) . "]");
             BetterAC::getProvider()->resetWarns($player->getName());
         }
     }

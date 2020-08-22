@@ -22,7 +22,6 @@ class MoveListener implements Listener
         BetterAC::getInstance()->lastMoveUpdates[$event->getPlayer()->getName()] = $event->getTo();
     }
 
-
     public function onTeleport(EntityTeleportEvent $event) {
         if (!$event->getEntity() instanceof Player) return;
         BetterAC::getInstance()->lastMoveUpdates[$event->getEntity()->getName()] = $event->getTo();

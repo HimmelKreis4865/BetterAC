@@ -16,6 +16,6 @@ class JoinListener implements Listener
 {
     public function onJoin(PlayerJoinEvent $event)
     {
-        if ($event->getPlayer()->getLevel()->getBlock($event->getPlayer()->add(0, 1))->getId() !== Block::AIR) $event->getPlayer()->teleport(new Vector3($event->getPlayer()->getFloorX(), ($event->getPlayer()->getLevel()->getHighestBlockAt($event->getPlayer()->getFloorX(), $event->getPlayer()->getFloorZ()) + 1), $event->getPlayer()->getFloorZ()));
+        if ($event->getPlayer()->getLevel()->getBlock($event->getPlayer()->add(0, 1))->isSolid()) $event->getPlayer()->teleport(new Vector3($event->getPlayer()->getFloorX(), ($event->getPlayer()->getLevel()->getHighestBlockAt($event->getPlayer()->getFloorX(), $event->getPlayer()->getFloorZ()) + 1), $event->getPlayer()->getFloorZ()));
     }
 }
