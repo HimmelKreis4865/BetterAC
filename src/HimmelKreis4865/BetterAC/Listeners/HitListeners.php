@@ -23,9 +23,6 @@ use pocketmine\Player;
 
 class HitListeners implements Listener
 {
-
-    private $moves = [];
-
     private $maxYawDif = [
         BetterAC::TYPE_MOBILE => 180.0,
         BetterAC::TYPE_PC => 10.0,

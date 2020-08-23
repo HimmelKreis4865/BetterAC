@@ -3,38 +3,16 @@
 namespace HimmelKreis4865\BetterAC\utils;
 
 use HimmelKreis4865\BetterAC\BetterAC;
+use pocketmine\Server;
 
 class ConfigSettingsManager
 {
+    public $ignoreOp = false;
     public $minTPS = 15;
-
     public $maxWarnsForBan = 4;
-
     public $punishCommands = ["ban {playername} hacking", "say {playername} got punished for hacking!"];
 
-    public $maxClicksPerSecond = [
-        BetterAC::TYPE_PC => 35,
-        BetterAC::TYPE_MOBILE => 25,
-        BetterAC::TYPE_CONSOLE => 15
-    ];
-    public $maxRange = [
-        BetterAC::TYPE_PC => 6,
-        BetterAC::TYPE_CONSOLE => 6,
-        BetterAC::TYPE_MOBILE => 8
-    ];
-
-    public $autoClickerCheckEnabled = false;
-    public $speedCheckEnabled = false;
-    public $noClipEnabled = false;
-    public $spamCheckEnabled = false;
-    public $reachCheckEnabled = false;
-
-    public $ignoreOp = false;
-
-    public $killAuraCheckEnabled = true;
-
     public $provider = "yaml";
-
     public $mysqlSettings = [
         "host" => "127.0.0.1",
         "username" => "user",
@@ -42,10 +20,33 @@ class ConfigSettingsManager
         "database" => "db"
     ];
 
-
-    public $spam_cooldown;
-
+    public $autoClickerCheckEnabled = false;
     public $interactAutoClickerEnabled = false;
+    public $maxClicksPerSecond = [
+        BetterAC::TYPE_PC => 35,
+        BetterAC::TYPE_MOBILE => 25,
+        BetterAC::TYPE_CONSOLE => 15
+    ];
+
+    public $reachCheckEnabled = false;
+    public $maxRange = [
+        BetterAC::TYPE_PC => 6,
+        BetterAC::TYPE_CONSOLE => 6,
+        BetterAC::TYPE_MOBILE => 8
+    ];
+
+    public $speedCheckEnabled = false;
+    public $noClipEnabled = false;
+
+    public $spamCheckEnabled = false;
+    public $spam_cooldown = 3;
+
+    public $instaBreakCheckEnabled = false;
+    public $killAuraCheckEnabled = true;
+
+    public $xRayCheckEnabled = false;
+    public $xRayLevels = [];
+
 
     public function __construct()
     {
@@ -58,6 +59,11 @@ class ConfigSettingsManager
         if ($file->exists("anti_reach") and (bool) $file->get("anti_reach")) $this->reachCheckEnabled = true;
         if ($file->exists("anti_killaura") and (bool) $file->get("anti_killaura")) $this->killAuraCheckEnabled = true;
         if ($file->exists("interactAutoClickerEnabled") and (bool) $file->get("interactAutoClickerEnabled")) $this->interactAutoClickerEnabled = true;
+        if ($file->exists("anti_instabreak") and (bool) $file->get("anti_instabreak")) $this->instaBreakCheckEnabled = true;
+        if ($file->exists("anti_xray") and (bool) $file->get("anti_xray") and $file->exists("xray_levels") and isset($file->get("xray_levels")[0])) {
+            $this->xRayCheckEnabled = true;
+            $this->xRayLevels = $file->get("xray_levels");
+        }
 
         if ($file->exists("provider") and $file->get("provider") === "mysql") {
             if ($file->getNested("mysql.host") !== null and $file->getNested("mysql.username") !== null and $file->getNested("mysql.password") !== null and $file->getNested("mysql.database") !== null) {
@@ -89,7 +95,6 @@ class ConfigSettingsManager
                 BetterAC::TYPE_CONSOLE => (int) $file->get("range_console")
             ];
         }
-
         if ($file->exists("spam_cooldown") and is_numeric($file->get("spam_cooldown"))) $this->spam_cooldown = (int) $file->get("spam_cooldown");
     }
 }

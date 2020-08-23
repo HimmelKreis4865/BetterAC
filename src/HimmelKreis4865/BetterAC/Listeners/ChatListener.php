@@ -10,16 +10,14 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 
 class ChatListener implements Listener
 {
-    public $playerTimes = [];
-
     public function onChat(PlayerChatEvent $event)
     {
         if ($event->isCancelled()) return;
-        if (isset($this->playerTimes[$event->getPlayer()->getName()]) and $this->playerTimes[$event->getPlayer()->getName()] > time()) {
+        if (isset(BetterAC::getInstance()->playerChatTimes[$event->getPlayer()->getName()]) and BetterAC::getInstance()->playerChatTimes[$event->getPlayer()->getName()] > time()) {
             $event->getPlayer()->sendMessage(BetterAC::PREFIX . BetterAC::getInstance()->getLanguageManager()->getLanguage()->translateString("spam_cooldown", ["{seconds}"], [BetterAC::getInstance()->configManager->spam_cooldown]));
             $event->setCancelled();
             return;
         }
-        $this->playerTimes[$event->getPlayer()->getName()] = time() + BetterAC::getInstance()->configManager->spam_cooldown;
+        BetterAC::getInstance()->playerChatTimes[$event->getPlayer()->getName()] = time() + BetterAC::getInstance()->configManager->spam_cooldown;
     }
 }

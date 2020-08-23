@@ -8,6 +8,8 @@ use HimmelKreis4865\BetterAC\Listeners\ChatListener;
 use HimmelKreis4865\BetterAC\Listeners\HitListeners;
 use HimmelKreis4865\BetterAC\Listeners\JoinListener;
 use HimmelKreis4865\BetterAC\Listeners\MoveListener;
+use HimmelKreis4865\BetterAC\Listeners\QuitListener;
+use HimmelKreis4865\BetterAC\Listeners\XRayListener;
 use HimmelKreis4865\BetterAC\Providers\MySQLProvider;
 use HimmelKreis4865\BetterAC\Providers\Provider;
 use HimmelKreis4865\BetterAC\Providers\YAMLProvider;
@@ -37,20 +39,10 @@ class BetterAC extends PluginBase
     /** @var null | Provider */
     private static $provider = null;
 
-    public $playerHits = [];
-
-    /**
-     * Saves last move update of players in array (username => Vector3)
-     * @var Vector3[]
-     */
-    public $lastMoveUpdates = [];
-
-    public $playerClientDataList = [];
-
     /** @var null | ConfigSettingsManager */
     public $configManager = null;
 
-    /* CLIENT DATA TYPES */
+    // --- CLIENT DATA TYPES START ----
 
     const TYPE_MOBILE = 0;
 
@@ -59,6 +51,29 @@ class BetterAC extends PluginBase
     const TYPE_CONSOLE = 2;
 
     const PREFIX = "§8[§eBetterAC§8] §7";
+
+    // --- CLIENT DATA TYPES END ----
+
+    // ---- PLAYER LIST ARRAYS START ----
+
+    public $playerHits = [];
+
+    /**
+     * Saves last move update of players in array (username => Vector3)
+     * @var Vector3[]
+     */
+    public $lastMoveUpdates = [];
+
+    /** @var array  */
+    public $playerClientDataList = [];
+
+    /** @var array */
+    public $playerChatTimes = [];
+
+    /** @var int[] */
+    public $blockBreakTimer = [];
+
+    // ---- PLAYER LIST ARRAYS END ----
 
     public function onEnable()
     {
@@ -69,11 +84,16 @@ class BetterAC extends PluginBase
         $this->initProvider();
         $this->initLanguage();
         if ($this->configManager->spamCheckEnabled)  $this->getServer()->getPluginManager()->registerEvents(new ChatListener(), $this);
-        if ($this->configManager->autoClickerCheckEnabled or $this->configManager->reachCheckEnabled) $this->getServer()->getPluginManager()->registerEvents(new HitListeners(), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new HitListeners(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new PacketListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new MoveListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new JoinListener(), $this);
-        if ($this->configManager->killAuraCheckEnabled) $this->getServer()->getPluginManager()->registerEvents(new BlockListener(), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new BlockListener(), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new QuitListener(), $this);
+        if ($this->configManager->xRayCheckEnabled)  {
+            $this->getServer()->getPluginManager()->registerEvents(new XRayListener(), $this);
+            $this->getLogger()->notice("Development version of Anti - Xray was enabled successfully");
+        }
         // task is submitted every 6 hours
         // If you changed mysqli timeout under this 6 hours, please change the code or just edit mysqli settings
         $this->getScheduler()->scheduleRepeatingTask(new MySQLRefreshTask(), (20 * 60 * 60 * 6));
@@ -81,6 +101,8 @@ class BetterAC extends PluginBase
     }
 
     /**
+     * @todo Make this system really working lol :o Maybe it's already working but I dunno yet
+      *
      * @return mixed
      */
     public function getLanguageManager() :?LanguageManager
@@ -89,6 +111,11 @@ class BetterAC extends PluginBase
     }
 
     /**
+     * Returns an instance of @link BetterAC if its called after onEnable() in PluginBase
+     * If you need this function in onEnable() of your own plugin, please make sure to load this plugin before your own
+     *
+     * @api
+     *
      * @return null|BetterAC
      */
     public static function getInstance() :?BetterAC
@@ -96,6 +123,11 @@ class BetterAC extends PluginBase
         return self::$instance;
     }
 
+    /**
+     * Returns an instance of the provider
+     *
+     * @return Provider|null
+     */
     public static function getProvider() :?Provider
     {
         return self::$provider;

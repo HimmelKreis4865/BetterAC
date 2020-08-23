@@ -2,15 +2,9 @@
 
 namespace HimmelKreis4865\BetterAC\Listeners;
 
-use MongoDB\Driver\Server;
-use pocketmine\block\Block;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\enchantment\EnchantmentInstance;
-use pocketmine\item\Pickaxe;
 use pocketmine\math\Vector3;
-use pocketmine\network\mcpe\protocol\types\Enchant;
 
 class JoinListener implements Listener
 {

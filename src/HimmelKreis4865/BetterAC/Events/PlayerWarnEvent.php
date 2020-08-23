@@ -17,7 +17,8 @@ class PlayerWarnEvent extends PlayerEvent implements Cancellable
     public const CAUSE_REACH = 2;
     public const CAUSE_SPEED = 3;
     public const CAUSE_NOCLIP = 4;
-    public const CAUSE_CUSTOM = 5;
+    public const CAUSE_NUKE = 5;
+    public const CAUSE_CUSTOM = 9;
 
     public function __construct(Player $player, int $cause = self::CAUSE_CUSTOM)
     {
@@ -40,6 +41,8 @@ class PlayerWarnEvent extends PlayerEvent implements Cancellable
             case self::CAUSE_KILLAURA: return "Killaura";
             case self::CAUSE_REACH: return "Reach";
             case self::CAUSE_SPEED: return "Speed";
+            case self::CAUSE_NUKE: return "Nuke";
+            case self::CAUSE_CUSTOM: return "Custom";
             case self::CAUSE_NOCLIP: return "No-Clip";
             default: return "";
         }
