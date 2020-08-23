@@ -14,7 +14,7 @@ class MoveListener implements Listener
 {
     public function onMove(PlayerMoveEvent $event) {
         $id = $event->getPlayer()->getLevel()->getBlock($event->getPlayer())->getId();
-        if ($event->getPlayer()->getLevel()->getBlock($event->getPlayer()->add(0, 1))->isSolid() and $id !== Block::SAND and $id !== Block::GRAVEL) {
+        if ($event->getPlayer()->getLevel()->getBlock($event->getPlayer()->add(0, 1))->isSolid() and $id !== Block::SAND and $id !== Block::GRAVEL and $event->getPlayer()->getGamemode() !== Player::SPECTATOR) {
             $event->setCancelled();
             $event->getPlayer()->teleport(new Vector3($event->getPlayer()->getFloorX(), ($event->getPlayer()->getLevel()->getHighestBlockAt($event->getPlayer()->getFloorX(), $event->getPlayer()->getFloorZ()) + 1), $event->getPlayer()->getFloorZ()));
             return;

@@ -11,12 +11,6 @@ This plugin is currently under development maintenance but you are already able 
 
 - [x] Language System - Your server is chinese? No - problem, just create a certain file. <a href='Languages.md'> Click here for instructions </a>
 
-- [x] Anti XRay - stop people seeing blocks through other blocks | CURRENTLY ONLY IN DEV VERSION - INCLUDES A DENY OF EXPLOSIONS IN SELECTED WORLDS
-
-- [x] Configurable worlds for Anti XRay
-
-- [x] Anti Nuke / Anti Instant block break - You should also enable this to stop nukers or instant block breakers on your server!
- 
 - [x] Anti autoclicker - what do you think is legit? 20 CPS? 30? set it in Config, and noone will be able to be faster!
 
 - [x] Anti speed - Disable fast runner on your server
@@ -32,7 +26,9 @@ This plugin is currently under development maintenance but you are already able 
 - [x] Individual device management - This plugin detects if you are playing on mobile, PC or a console to customizable max. clicks per second (cps) or range in blocks
 
 ## What this plugin is not supposed to do
-This plugin does not check for fly, because pocketmine's flight anticheat is good enough in my opinion.
+I wont add Anti X-Ray or anthing to see players / tiles / blocks and stuff faster, because this Anticheat was made for PVP
+
+This plugin does not check for fly, because pocketmine's flight anticheat is good enough.
 
 ## Any other suggestions or errors?
 Please open an Issue!
