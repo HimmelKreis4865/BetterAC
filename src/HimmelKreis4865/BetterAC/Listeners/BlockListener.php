@@ -47,7 +47,7 @@ class BlockListener implements Listener
         if(!isset(BetterAC::getInstance()->blockBreakTimer[$player->getRawUniqueId()])){
             $event->setCancelled();
             BetterAC::getInstance()->getLogger()->debug("Player " . $player->getName() . " wanted to break a block without starting it, so he got warned.");
-            BetterAC::getInstance()->warnPlayer($event->getPlayer(), PlayerWarnEvent::CAUSE_NUKE);
+            BetterAC::getInstance()->warnPlayer($event->getPlayer(), PlayerWarnEvent::CAUSE_INSTA_BREAK);
             return;
         }
         $expectedTime = ceil($event->getBlock()->getBreakTime($event->getItem()) * 20);
@@ -60,7 +60,7 @@ class BlockListener implements Listener
 
         if($actualTime < $expectedTime){
             BetterAC::getInstance()->getLogger()->debug("Player " . $player->getName() . " is breaking blocks in $actualTime ticks, $expectedTime ticks were expected so player was warned.");
-            BetterAC::getInstance()->warnPlayer($event->getPlayer(), PlayerWarnEvent::CAUSE_NUKE);
+            BetterAC::getInstance()->warnPlayer($event->getPlayer(), PlayerWarnEvent::CAUSE_INSTA_BREAK);
             $event->setCancelled();
             unset(BetterAC::getInstance()->blockBreakTimer[$player->getRawUniqueId()]);
             return;

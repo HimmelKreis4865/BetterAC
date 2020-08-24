@@ -47,6 +47,7 @@ class ConfigSettingsManager
     public $xRayCheckEnabled = false;
     public $xRayLevels = [];
 
+    public $warned_modules = [];
 
     public function __construct()
     {
@@ -96,5 +97,7 @@ class ConfigSettingsManager
             ];
         }
         if ($file->exists("spam_cooldown") and is_numeric($file->get("spam_cooldown"))) $this->spam_cooldown = (int) $file->get("spam_cooldown");
+
+        if ($file->exists("warned_modules") and is_array($file->get("warned_modules"))) $this->warned_modules = $file->get("warned_modules");
     }
 }
