@@ -20,8 +20,6 @@ use HimmelKreis4865\BetterAC\utils\Language;
 use HimmelKreis4865\BetterAC\utils\UpdateChecker;
 use HimmelKreis4865\BetterAC\Listeners\PacketListener;
 use pocketmine\command\ConsoleCommandSender;
-use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\Pickaxe;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -175,12 +173,10 @@ class BetterAC extends PluginBase
      *
      * @param Player $player
      *
-     * @param bool $pickAxeCheck temporary unused
-     *
      * @return true if legit
      * @return false if not legit and player get warned
      */
-    public function checkClickRate(Player $player, bool $pickAxeCheck = false) :bool
+    public function checkClickRate(Player $player) :bool
     {
         $maxClicks = $this->configManager->maxClicksPerSecond[$this->playerClientDataList[$player->getName()]];
         $hits = 1;
