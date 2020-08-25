@@ -211,12 +211,27 @@ class BetterAC extends PluginBase
         if ($event->isCancelled()) return;
         BetterAC::getProvider()->addWarn($player->getName());
         $this->getLogger()->notice("Player" . $player->getName() . " was automatically warned by BetterAC for [" . PlayerWarnEvent::getCauseString($cause) . "]");
-        if ((int) BetterAC::getProvider()->getWarns($player->getName()) > $this->configManager->maxWarnsForBan) {
+        if ((int) BetterAC::getProvider()->getWarns($player->getName()) > $this->configManager->maxWarnsForPunish) {
             foreach ($this->configManager->punishCommands as $command) {
                 Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), str_replace(["{playername}", "{reason}"], [$player->getName(), PlayerWarnEvent::getCauseString($cause)], $command));
             }
             $this->getLogger()->notice("Player " . $player->getName() . " was automatically punished by BetterAC for: [" . PlayerWarnEvent::getCauseString($cause) . "]");
             BetterAC::getProvider()->resetWarns($player->getName());
+        }
+    }
+
+    public function getDeviceOS(string $player) :int
+    {
+        return ((isset($this->playerClientDataList[$player])) ? $this->playerClientDataList[$player] : -1);
+    }
+    public function getDeviceName(string $player) :string
+    {
+        $os = $this->getDeviceOS($player);
+        switch ($os) {
+            case self::TYPE_MOBILE: return "mobile";
+            case self::TYPE_PC: return "computer";
+            case self::TYPE_CONSOLE: return "console";
+            default: return "unknown";
         }
     }
 }

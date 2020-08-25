@@ -9,7 +9,7 @@ class ConfigSettingsManager
 {
     public $ignoreOp = false;
     public $minTPS = 15;
-    public $maxWarnsForBan = 4;
+    public $maxWarnsForPunish = 4;
     public $punishCommands = ["ban {playername} hacking", "say {playername} got punished for hacking!"];
 
     public $provider = "yaml";
@@ -81,7 +81,7 @@ class ConfigSettingsManager
         if ($file->exists("check_ops") and (bool) $file->get("check_ops")) $this->ignoreOp = true;
         if ($file->exists("punish_commands") and is_array($file->get("punish_commands"))) $this->punishCommands = $file->get("punish_commands");
         if ($file->exists("min_tps")) $this->minTPS = $file->get("min_tps");
-        if ($file->exists("max_warns") and is_numeric($file->get("max_warns"))) $this->maxWarnsForBan = (int) $file->get("max_warns");
+        if ($file->exists("max_warns") and is_numeric($file->get("max_warns"))) $this->maxWarnsForPunish = (int) $file->get("max_warns");
         if ($file->exists("autoclicker_pc") and $file->exists("autoclicker_console") and $file->exists("autoclicker_mobile")) {
             $this->maxClicksPerSecond = [
                 BetterAC::TYPE_MOBILE => (int) $file->get("autoclicker_mobile"),

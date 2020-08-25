@@ -4,11 +4,13 @@ Welcome to README of BetterAC, an AntiCheat plugin for your PocketMine-MP server
 
 This plugin is currently under development maintenance but you are already able to see what its going to do!
 
+You can also take a look in the <a href="https://github.com/HimmelKreis4865/BetterAC/wiki"> Wiki (not finished yet) </a> to see more details
+
 ## Features
 - [x] TPS checker to keep performance perfect
 - [x] Update notify system - Be always up to date! 
 - [x] Language System - Your server is chinese? No - problem, just create a certain file. <a href='Languages.md'> Click here for instructions </a>
-- [x] Anti X-Ray - You can easily disable X-Ray! Hackers trying to find ores with that module will see nothing, except thereare fake ores **everywhere!**
+- [x] Anti X-Ray - You can easily disable X-Ray! Hackers trying to find ores with that module will see nothing, except there are fake ores **everywhere!**
 - [x] Anti autoclicker - what do you think is legit? 20 CPS? 30? set it in Config, and noone will be able to be faster!
 - [x] Anti speed - Disable fast runner on your server
 - [x] Anti NoClip - Players can fly threw blocks? Let's disable that 

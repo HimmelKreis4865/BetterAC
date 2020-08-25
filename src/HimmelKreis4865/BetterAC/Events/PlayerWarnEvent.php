@@ -44,7 +44,7 @@ class PlayerWarnEvent extends PlayerEvent implements Cancellable
             case self::CAUSE_SPEED: return "speed";
             case self::CAUSE_INSTA_BREAK: return "instabreak";
             case self::CAUSE_SPAM: return "spam";
-            case self::CAUSE_CUSTOM: return "Custom";
+            case self::CAUSE_CUSTOM: return "custom";
             case self::CAUSE_NOCLIP: return "noclip";
             default: return "";
         }
