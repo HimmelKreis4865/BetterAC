@@ -47,7 +47,6 @@ class XRayListener implements Listener
     public function updateBlocks(BlockBreakEvent $event)
     {
         if ($event->getPlayer()->getLevel() === null or !in_array($event->getPlayer()->getLevel()->getName(), BetterAC::getInstance()->configManager->xRayLevels)) {
-            var_dump($event->getPlayer()->getLevel());
             return;
         }
         $blocks = [$event->getBlock()->asVector3()];

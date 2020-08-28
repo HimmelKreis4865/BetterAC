@@ -30,6 +30,7 @@ class BlockListener implements Listener
 
     public function onInteract(PlayerInteractEvent $event)
     {
+        if ($event->isCancelled()) return;
         if (!BetterAC::getInstance()->configManager->instaBreakCheckEnabled) return;
         if($event->getAction() === PlayerInteractEvent::LEFT_CLICK_BLOCK) BetterAC::getInstance()->blockBreakTimer[$event->getPlayer()->getRawUniqueId()] = floor(microtime(true) * 20);
     }
@@ -39,6 +40,8 @@ class BlockListener implements Listener
      */
     public function onBreak(BlockBreakEvent $event)
     {
+        if ($event->isCancelled()) return;
+
         if (!BetterAC::getInstance()->configManager->instaBreakCheckEnabled) return;
 
         $player = $event->getPlayer();
